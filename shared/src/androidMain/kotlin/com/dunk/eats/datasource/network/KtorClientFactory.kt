@@ -12,7 +12,7 @@ actual class KtorClientFactory {
                  serializer = KotlinxSerializer(
                      kotlinx.serialization.json.Json {
                          ignoreUnknownKeys = true
-                     }
+                     } 
                  )
              }
         }
