@@ -12,6 +12,7 @@ import com.dunk.eats.android.presentation.recipe_detail.RecipeDetailViewModel
 import com.dunk.eats.android.presentation.recipe_list.ListRecipeScreen
 import com.dunk.eats.android.presentation.recipe_list.RecipeListViewModel
 
+@OptIn(ExperimentalStdlibApi::class)
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
@@ -29,7 +30,7 @@ fun Navigation() {
             })
         ){ navBackStackEntry ->
             val viewModel:RecipeDetailViewModel =  hiltViewModel()
-            RecipeDetailScreen(recipeId = viewModel.recipeId.value)
+            RecipeDetailScreen(recipe = viewModel.recipe.value)
         }
     }
 }
