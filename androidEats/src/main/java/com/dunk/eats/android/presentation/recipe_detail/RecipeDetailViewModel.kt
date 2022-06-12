@@ -31,6 +31,7 @@ class RecipeDetailViewModel @Inject constructor(
     }
 
     private fun getRecipe(recipeId:Int){
+        println("Recipe list view model:..id.....${recipeId}")
         getRecipe.execute(
             recipeId = recipeId
         ).onEach { dataState ->

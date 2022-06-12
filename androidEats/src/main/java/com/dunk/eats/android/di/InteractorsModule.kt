@@ -1,5 +1,6 @@
 package com.dunk.eats.android.di
 
+import com.dunk.eats.datasource.cache.RecipeCache
 import com.dunk.eats.datasource.network.recipeService.RecipeService
 import com.dunk.eats.interactors.recipe_detail.GetRecipe
 import com.dunk.eats.interactors.recipe_list.SearchRecipes
@@ -15,16 +16,17 @@ class InteractorsModule {
     @Singleton
     @Provides
     fun provideSearchRecipes(
-        recipeService: RecipeService
+        recipeService: RecipeService,
+        recipeCache: RecipeCache
     ): SearchRecipes{
-        return SearchRecipes(recipeService = recipeService)
+        return SearchRecipes(recipeService = recipeService, recipeCache = recipeCache)
     }
 
     @Singleton
     @Provides
     fun provideGetRecipes(
-        recipeService: RecipeService
+        recipeCache: RecipeCache
     ): GetRecipe{
-        return GetRecipe(recipeService = recipeService)
+        return GetRecipe(recipeCache = recipeCache)
     }
 }
