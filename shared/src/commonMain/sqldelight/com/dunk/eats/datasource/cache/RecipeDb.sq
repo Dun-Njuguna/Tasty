@@ -5,7 +5,9 @@ CREATE TABLE  recipe_Entity(
     featured_image TEXT NOT NULL,
     rating INTEGER NOT NULL,
     source_url TEXT NOT NULL,
-    ingredients TEXT NOT NULL,
+    ingredients TEXT NOT NULL ,
+    description TEXT,
+    cooking_Instructions TEXT,
     date_added REAL NOT NULL,
     date_updated REAL NOT NULL
 );
@@ -24,9 +26,11 @@ INTO recipe_Entity (
     rating,
     source_url,
     ingredients,
+    description,
+    cooking_Instructions,
     date_added,
     date_updated
-) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 searchRecipes:
 SELECT * FROM recipe_Entity
