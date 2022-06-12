@@ -86,6 +86,6 @@ android {
 sqldelight {
     database("RecipeDatabase") {
         packageName = "com.dunk.eats.datasource.cache"
-        sourceFolders = listOf("sqldelight")
+        sourceFolders = listOf(" ")
     }
 }
