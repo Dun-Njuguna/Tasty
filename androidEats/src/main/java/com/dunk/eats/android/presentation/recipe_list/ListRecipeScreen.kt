@@ -7,23 +7,31 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.dunk.eats.android.theme.AppTheme
 
+@OptIn(ExperimentalComposeUiApi::class, androidx.compose.material.ExperimentalMaterialApi::class)
 @Composable
 fun ListRecipeScreen(
     onSelectRecipe: (Int) -> Unit
 ) {
-    LazyColumn {
-        items(100) { recipieId ->
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable {
-                        onSelectRecipe(recipieId)
-                    }
-            ) {
-                Text(text = "$recipieId", modifier = Modifier.padding(16.dp))
+    AppTheme(displayProgressBar = false) {
+        LazyColumn {
+            items(100) { recipeId ->
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            onSelectRecipe(recipeId)
+                        }
+                ) {
+                    Text(
+                        text = "$recipeId",
+                        modifier = Modifier.padding(16.dp),
+                    )
+                }
             }
         }
     }
