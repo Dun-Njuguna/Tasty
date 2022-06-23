@@ -3,11 +3,14 @@ package com.dunk.eats.android.theme
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import com.dunk.eats.android.presentation.components.CircularProgressBar
 import java.util.*
 
 private val LightThemeColors = lightColors(
@@ -38,12 +41,11 @@ fun AppTheme(
         Box(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(top = 10.dp, start = 10.dp, end = 10.dp)
                 .background(color = Grey1)
         ){
             content()
-            if(displayProgressBar){
-
-            }
+            CircularProgressBar(isDisplayed = displayProgressBar, verticalBias = 0.5f)
         }
     }
 }

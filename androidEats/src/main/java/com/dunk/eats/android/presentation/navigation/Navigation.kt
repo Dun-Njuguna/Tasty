@@ -19,9 +19,12 @@ fun Navigation() {
     NavHost(navController = navController, startDestination = Screen.RecipeList.route){
         composable(route = Screen.RecipeList.route){ navBackStackEntry ->
             val viewModel:RecipeListViewModel =  hiltViewModel()
-            ListRecipeScreen(onSelectRecipe = { recipeId ->
-                navController.navigate(Screen.RecipeDetail.route + "/$recipeId" )
-            })
+            ListRecipeScreen(
+                state = viewModel.state.value,
+                 onClickRecipeListItem = { recipeId ->
+                     navController.navigate(Screen.RecipeDetail.route + "/$recipeId" )
+                 }
+            )
         }
         composable(
             route = Screen.RecipeDetail.route + "/{recipeId}",

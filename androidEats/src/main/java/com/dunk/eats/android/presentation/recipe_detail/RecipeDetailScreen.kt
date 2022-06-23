@@ -1,8 +1,11 @@
 package com.dunk.eats.android.presentation.recipe_detail
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
+import com.dunk.eats.android.presentation.components.RecipeImage
 import com.dunk.eats.android.theme.AppTheme
 import com.dunk.eats.domain.model.Recipe
 
@@ -15,8 +18,16 @@ fun RecipeDetailScreen(
         if (recipe == null){
             Text(text = "Error")
         }else{
-            Text(text = "recipe id ${recipe.title}")
-            Text(text = "recipe id ${recipe.ingredients}")
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                RecipeImage(
+                    url = recipe.featuredImage,
+                    contentDescription =recipe.title
+                )
+                Text(text = "recipe id ${recipe.title}")
+                Text(text = "recipe id ${recipe.ingredients}")
+            }
         }
     }
 }

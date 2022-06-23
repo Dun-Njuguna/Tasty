@@ -42,7 +42,7 @@ hilt {
 dependencies {
     implementation(project(":shared"))
 
-    implementation(Accompanist.coil)
+    implementation(Coil.coil)
 
     implementation(AndroidX.appCompat)
     implementation(AndroidX.fragmentKtx)
