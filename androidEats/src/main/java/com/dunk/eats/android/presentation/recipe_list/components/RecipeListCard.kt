@@ -21,13 +21,16 @@ fun RecipeListCard(
     Card(
         shape = MaterialTheme.shapes.small,
         modifier = Modifier
-            .padding(bottom = 6.dp, top = 6.dp)
+            .padding(6.dp)
             .fillMaxWidth(),
         onClick = onclick,
         elevation = 8.dp
     ) {
-        Column {
-            RecipeImage(url = recipe.featuredImage, contentDescription = recipe.title)
+        Column(
+            modifier = Modifier
+                .height(220.dp)
+        ) {
+            RecipeImage(imageHeight = 120.dp, url = recipe.featuredImage, contentDescription = recipe.title)
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -38,7 +41,7 @@ fun RecipeListCard(
                     modifier = Modifier
                         .fillMaxWidth(0.85f)
                         .wrapContentWidth(Alignment.Start),
-                    style = MaterialTheme.typography.h3
+                    style = MaterialTheme.typography.h5
                 )
                 Text(
                     text = recipe.rating.toString(),
@@ -47,7 +50,7 @@ fun RecipeListCard(
                         .wrapContentWidth(Alignment.End)
                         .align(Alignment.CenterVertically)
                     ,
-                    style = MaterialTheme.typography.h2
+                    style = MaterialTheme.typography.h6
                 )
             }
         }

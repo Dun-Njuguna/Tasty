@@ -7,6 +7,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
@@ -16,16 +17,17 @@ import coil.request.ImageRequest
 @Composable
 fun RecipeImage(
     url: String,
-    contentDescription: String
+    contentDescription: String,
+    imageHeight:Dp = 260.dp,
 ) {
     Box(
-        contentAlignment = Alignment.Center,
+        contentAlignment = Alignment.Center
     ) {
         SubcomposeAsyncImage(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(10.dp)
-                .height(260.dp),
+                .height(imageHeight),
             model = ImageRequest.Builder(LocalContext.current)
                 .data(url)
                 .crossfade(true)
