@@ -35,10 +35,21 @@ class RecipeListViewModel @Inject constructor(
             RecipeListEvents.NextPage -> {
                 nextPage()
             }
+            RecipeListEvents.NewSearch -> {
+                newSearch()
+            }
+            is RecipeListEvents.OnUpdateQuery  -> {
+                state.value = state.value.copy(query =  event.query)
+            }
             else -> {
                 handleError("Invalid event")
             }
         }
+    }
+
+    private fun newSearch() {
+        state.value = state.value.copy(page = 1, recipes = listOf() )
+        loadRecipes()
     }
 
     private fun nextPage() {
