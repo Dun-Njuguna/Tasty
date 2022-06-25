@@ -21,6 +21,7 @@ fun Navigation() {
             val viewModel:RecipeListViewModel =  hiltViewModel()
             ListRecipeScreen(
                 state = viewModel.state.value,
+                onTriggerEvent = viewModel::onTriggerEvent ,
                  onClickRecipeListItem = { recipeId ->
                      navController.navigate(Screen.RecipeDetail.route + "/$recipeId" )
                  }

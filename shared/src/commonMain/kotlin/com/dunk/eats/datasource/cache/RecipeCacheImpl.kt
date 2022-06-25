@@ -1,6 +1,6 @@
 package com.dunk.eats.datasource.cache
 
-import com.dunk.eats.datasource.network.recipeService.RecipeServiceImp.Companion.PAGE_SIZE
+import com.dunk.eats.datasource.network.recipeService.RecipeServiceImp.Companion.RECIPE_PAGINATION_PAGE_SIZE
 import com.dunk.eats.domain.model.Recipe
 import com.dunk.eats.domain.util.DatetimeUtil
 
@@ -34,11 +34,11 @@ class RecipeCacheImpl(
     }
 
     override fun search(query: String, page: Int): List<Recipe> {
-       return  queries.searchRecipes(query = query, pageSize = PAGE_SIZE.toLong(), offset = ((page - 1 ) * PAGE_SIZE).toLong()).executeAsList().toRecipeList()
+       return  queries.searchRecipes(query = query, pageSize = RECIPE_PAGINATION_PAGE_SIZE.toLong(), offset = ((page - 1 ) * RECIPE_PAGINATION_PAGE_SIZE).toLong()).executeAsList().toRecipeList()
     }
 
     override fun getAll(page: Int): List<Recipe> {
-        return  queries.getAllRecipes(pageSize = PAGE_SIZE.toLong(), offset = ((page - 1 ) * PAGE_SIZE).toLong()).executeAsList().toRecipeList()
+        return  queries.getAllRecipes(pageSize = RECIPE_PAGINATION_PAGE_SIZE.toLong(), offset = ((page - 1 ) * RECIPE_PAGINATION_PAGE_SIZE).toLong()).executeAsList().toRecipeList()
     }
 
     override fun get(recipeId: Int): Recipe? {

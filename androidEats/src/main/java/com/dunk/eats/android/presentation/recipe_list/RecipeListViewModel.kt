@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dunk.eats.domain.model.Recipe
 import com.dunk.eats.interactors.recipe_list.SearchRecipes
+import com.dunk.eats.presentation.recipe_list.RecipeListEvents
 import com.dunk.eats.presentation.recipe_list.RecipeListState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -22,6 +23,27 @@ class RecipeListViewModel @Inject constructor(
      val state: MutableState<RecipeListState> = mutableStateOf(RecipeListState())
 
     init {
+       onTriggerEvent(RecipeListEvents.LoadRecipes )
+    }
+
+    fun onTriggerEvent(event:RecipeListEvents){
+        when(event){
+            RecipeListEvents.LoadRecipes -> {
+                loadRecipes()
+            }
+
+            RecipeListEvents.NextPage -> {
+                nextPage()
+            }
+            else -> {
+                handleError("Invalid event")
+            }
+        }
+    }
+
+    private fun nextPage() {
+        //update the state and increment the page
+         state.value = state.value.copy(page = state.value.page + 1)
         loadRecipes()
     }
 
@@ -37,7 +59,7 @@ class RecipeListViewModel @Inject constructor(
             }
 
             dataState.message?.let { message ->
-                println("RecipeListVM: error: ${message}")
+                handleError(message)
             }
         }.launchIn(viewModelScope)
     }
@@ -46,6 +68,10 @@ class RecipeListViewModel @Inject constructor(
         val curr = ArrayList(state.value.recipes)
         curr.addAll(recipes)
         state.value = state.value.copy(recipes = curr)
+    }
+
+    private fun handleError(errorMessage: String) {
+
     }
 
 }
