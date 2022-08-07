@@ -18,15 +18,6 @@ fun ListRecipeScreen(
 ) {
     AppTheme(displayProgressBar = state.isLoading) {
         Column {
-            SearchAppBar(
-                query = state.query,
-                onQueryChange = {
-                     onTriggerEvent(RecipeListEvents.OnUpdateQuery(it))
-                },
-                onExecuteSearch = {
-                    onTriggerEvent(RecipeListEvents.NewSearch)
-                }
-            )
             RecipeList(
                 loading = state.isLoading,
                 recipes = state.recipes,

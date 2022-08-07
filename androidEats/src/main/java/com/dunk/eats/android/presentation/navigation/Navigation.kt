@@ -3,26 +3,33 @@ package com.dunk.eats.android.presentation.navigation
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavDestination
+import androidx.navigation.*
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.dunk.eats.android.presentation.recipe_browse.RecipeBrowseScreen
+import com.dunk.eats.android.presentation.recipe_browse.RecipeBrowseViewModel
 import com.dunk.eats.android.presentation.recipe_detail.RecipeDetailScreen
 import com.dunk.eats.android.presentation.recipe_detail.RecipeDetailViewModel
 import com.dunk.eats.android.presentation.recipe_list.ListRecipeScreen
@@ -76,7 +83,14 @@ fun Navigation() {
                 composable(
                     route = Screen.RecipeBrowseScreen.route,
                 ) { navBackStackEntry ->
-                    RecipeBrowseScreen()
+                    val viewModel: RecipeBrowseViewModel = hiltViewModel()
+                    RecipeBrowseScreen(
+                        state = viewModel.state.value,
+                        onTriggerEvent = viewModel::onTriggerEvent,
+                        onClickRecipeBrowseItem = { recipeId ->
+                            navController.navigate(Screen.RecipeDetail.route + "/$recipeId")
+                        }
+                    )
                 }
 
                 composable(
@@ -128,6 +142,41 @@ fun BuildBottomNav(navController: NavHostController, currentDestination: NavDest
                         }
                     }
                 )
+            }
+        }
+    }
+}
+
+
+@Composable
+fun BottomNavItem(
+    title:String,
+    selected:Boolean,
+    imageResource:Int,
+    description:String,
+    onclick:() -> Unit,
+){
+    val backgroundColor = if (selected){MaterialTheme.colors.primary}else{MaterialTheme.colors.onPrimary}
+    val contentColor = if (selected){MaterialTheme.colors.onPrimary}else{MaterialTheme.colors.primary}
+    Box(
+        modifier = Modifier
+            .clip(CircleShape)
+            .background(backgroundColor)
+            .clickable(onClick = onclick)
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(5.dp)
+        ) {
+            Icon(
+                painter = painterResource(id = imageResource),
+                contentDescription = description,
+                tint =  contentColor
+            )
+            AnimatedVisibility(visible = selected) {
+                 Text(text = title, style = MaterialTheme.typography.h6)
             }
         }
     }

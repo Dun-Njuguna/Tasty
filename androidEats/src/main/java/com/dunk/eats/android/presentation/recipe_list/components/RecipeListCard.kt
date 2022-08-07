@@ -8,6 +8,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.dunk.eats.android.presentation.components.RecipeImage
 import com.dunk.eats.domain.model.Recipe
@@ -16,6 +17,7 @@ import com.dunk.eats.domain.model.Recipe
 @Composable
 fun RecipeListCard(
     recipe: Recipe,
+    imageHeight: Dp = 120.dp,
     onclick: ()-> Unit
 ){
     Card(
@@ -28,9 +30,9 @@ fun RecipeListCard(
     ) {
         Column(
             modifier = Modifier
-                .height(220.dp)
+                .defaultMinSize(minHeight = 220.dp)
         ) {
-            RecipeImage(imageHeight = 120.dp, url = recipe.featuredImage, contentDescription = recipe.title)
+            RecipeImage(imageHeight = imageHeight, url = recipe.featuredImage, contentDescription = recipe.title)
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
