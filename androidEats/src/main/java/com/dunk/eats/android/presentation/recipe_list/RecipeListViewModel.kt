@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dunk.eats.domain.model.Recipe
 import com.dunk.eats.interactors.recipe_list.SearchRecipes
+import com.dunk.eats.interactors.recipe_categories.CategoryUtil
 import com.dunk.eats.presentation.recipe_list.RecipeListEvents
 import com.dunk.eats.presentation.recipe_list.RecipeListState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,7 +18,8 @@ import javax.inject.Inject
 @HiltViewModel
 class RecipeListViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val searchRecipes:SearchRecipes
+    private val searchRecipes:SearchRecipes,
+    private val categoryUtil: CategoryUtil
 ) : ViewModel() {
 
      val state: MutableState<RecipeListState> = mutableStateOf(RecipeListState())
@@ -29,6 +31,8 @@ class RecipeListViewModel @Inject constructor(
     fun onTriggerEvent(event:RecipeListEvents){
         when(event){
             RecipeListEvents.LoadRecipes -> {
+                loadTopCategories()
+                loadNewCategories()
                 loadRecipes()
             }
 
@@ -56,6 +60,14 @@ class RecipeListViewModel @Inject constructor(
         //update the state and increment the page
          state.value = state.value.copy(page = state.value.page + 1)
         loadRecipes()
+    }
+
+    private fun loadNewCategories(){
+        state.value = state.value.copy(newCategories = categoryUtil.getNewCategories())
+    }
+
+    private fun loadTopCategories(){
+        state.value = state.value.copy(topCategories = categoryUtil.getAllCategories().subList(0, 4))
     }
 
     private fun loadRecipes(){

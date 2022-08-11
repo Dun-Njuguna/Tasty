@@ -1,8 +1,9 @@
 package com.dunk.eats.android.presentation.recipe_browse.components
 
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.foundation.lazy.itemsIndexed
+
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
@@ -27,7 +28,7 @@ fun RecipeListGridView(
     }
     else {
         LazyVerticalGrid(
-            cells = GridCells.Adaptive(minSize = 145.dp)
+            columns = GridCells.Adaptive(minSize = 145.dp)
         ) {
             itemsIndexed(items = recipes) { index: Int, recipe ->
                 if ((index + 1) >= page * RECIPE_PAGINATION_PAGE_SIZE && !loading) {
