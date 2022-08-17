@@ -6,6 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dunk.eats.domain.model.Recipe
+import com.dunk.eats.interactors.recipe_categories.Category
 import com.dunk.eats.interactors.recipe_list.SearchRecipes
 import com.dunk.eats.interactors.recipe_categories.CategoryUtil
 import com.dunk.eats.presentation.recipe_list.RecipeListEvents
@@ -43,12 +44,24 @@ class RecipeListViewModel @Inject constructor(
                 newSearch()
             }
             is RecipeListEvents.OnUpdateQuery  -> {
-                state.value = state.value.copy(query =  event.query)
+                state.value = state.value.copy(query =  event.query, selectedCategory = null)
+            }
+            is RecipeListEvents.OnSelectCategory  -> {
+                onSelectCategory(event.category)
             }
             else -> {
                 handleError("Invalid event")
             }
         }
+    }
+
+    fun getFoodCategory(categoryName:String): Category? {
+        return categoryUtil.getCategory(categoryName)
+    }
+
+    private fun onSelectCategory(category: Category) {
+        state.value = state.value.copy(selectedCategory = category, query = category.categoryName)
+        newSearch()
     }
 
     private fun newSearch() {

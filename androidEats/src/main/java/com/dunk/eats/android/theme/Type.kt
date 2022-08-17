@@ -40,7 +40,7 @@ val QuickSandTypography = Typography(
     ),
     h5 = TextStyle(
         fontFamily = QuickSand,
-        fontWeight = FontWeight.W400,
+        fontWeight = FontWeight.W500,
         fontSize = 16.sp,
     ),
     h6 = TextStyle(

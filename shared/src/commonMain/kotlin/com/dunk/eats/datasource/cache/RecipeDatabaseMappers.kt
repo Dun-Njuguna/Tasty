@@ -35,7 +35,7 @@ fun List<String>.convertIngredientListToString(): String {
 
 fun String.convertIngredientToList(): List<String> {
     val list: ArrayList<String> = arrayListOf()
-    for (ingredient in split(", ")) {
+    for (ingredient in split(",")) {
         list.add(ingredient)
     }
     return list

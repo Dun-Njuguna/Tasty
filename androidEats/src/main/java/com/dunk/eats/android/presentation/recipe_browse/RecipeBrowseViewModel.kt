@@ -6,9 +6,12 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dunk.eats.domain.model.Recipe
+import com.dunk.eats.interactors.recipe_categories.Category
+import com.dunk.eats.interactors.recipe_categories.CategoryUtil
 import com.dunk.eats.interactors.recipe_list.SearchRecipes
 import com.dunk.eats.presentation.recipe_browse.RecipeBrowseEvents
 import com.dunk.eats.presentation.recipe_browse.RecipeBrowseState
+import com.dunk.eats.presentation.recipe_list.RecipeListEvents
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -17,15 +20,21 @@ import javax.inject.Inject
 @HiltViewModel
 class RecipeBrowseViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val searchRecipes: SearchRecipes
+    private val searchRecipes: SearchRecipes,
+    private val categoryUtil: CategoryUtil
 ) : ViewModel() {
 
     val state: MutableState<RecipeBrowseState> = mutableStateOf(RecipeBrowseState())
 
+    init {
+        onTriggerEvent(RecipeBrowseEvents.LoadCategories)
+    }
+
     fun onTriggerEvent(event: RecipeBrowseEvents){
         when(event){
             RecipeBrowseEvents.LoadCategories -> {
-                loadRecipes()
+                //loadRecipes()
+                loadPopularCategories()
             }
 
             RecipeBrowseEvents.NextPage -> {
@@ -37,10 +46,22 @@ class RecipeBrowseViewModel @Inject constructor(
             is RecipeBrowseEvents.OnUpdateQuery  -> {
                 state.value = state.value.copy(query =  event.query)
             }
+            is RecipeBrowseEvents.OnSelectCategory  -> {
+                onSelectCategory(event.category)
+            }
             else -> {
                 handleError("Invalid event")
             }
         }
+    }
+
+    fun getFoodCategory(categoryName:String): Category? {
+        return categoryUtil.getCategory(categoryName)
+    }
+
+    private fun onSelectCategory(category: Category) {
+        state.value = state.value.copy(selectedCategory = category, query = category.categoryName)
+        newSearch()
     }
 
     private fun newSearch() {
@@ -75,6 +96,10 @@ class RecipeBrowseViewModel @Inject constructor(
         val curr = ArrayList(state.value.recipes)
         curr.addAll(recipes)
         state.value = state.value.copy(recipes = curr)
+    }
+
+    private fun loadPopularCategories(){
+        state.value = state.value.copy(popularCategories = categoryUtil.getAllCategories())
     }
 
     private fun handleError(errorMessage: String) {

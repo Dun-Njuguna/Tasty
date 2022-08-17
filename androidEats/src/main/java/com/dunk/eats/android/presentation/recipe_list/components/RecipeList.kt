@@ -15,15 +15,19 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
+import com.dunk.eats.android.presentation.components.PreviewImageCard
 import com.dunk.eats.datasource.network.recipeService.RecipeServiceImp.Companion.RECIPE_PAGINATION_PAGE_SIZE
+import com.dunk.eats.interactors.recipe_categories.Category
+import com.dunk.eats.presentation.recipe_list.RecipeListEvents
 import com.dunk.eats.presentation.recipe_list.RecipeListState
 
 @OptIn(ExperimentalMaterialApi::class, androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
 fun RecipeList(
     state:RecipeListState,
-    onTriggerNextPage: () -> Unit,
-    onClickRecipeListItem:(Int) -> Unit
+    onTriggerEvent: (RecipeListEvents) -> Unit,
+    onClickRecipeListItem:(Int) -> Unit,
+    getFoodCategory: (name:String) -> Category?,
 ) {
     if (state.isLoading && state.recipes.isEmpty()){
 
@@ -34,20 +38,22 @@ fun RecipeList(
     else {
         LazyColumn {
             item {
-                DisplayCategoryChips(state)
+                DisplayCategoryChips(state, getFoodCategory, onTriggerEvent)
             }
             itemsIndexed(
                 items = state.recipes
             ) { index: Int, recipe ->
                 if ((index + 1) >= state.page * RECIPE_PAGINATION_PAGE_SIZE &&!state.isLoading ){
-                    onTriggerNextPage()
+                    onTriggerEvent(RecipeListEvents.NextPage)
                 }
-                RecipeListCard(
-                    recipe = recipe,
+                PreviewImageCard(
+                    imageUrl = recipe.featuredImage,
+                    title = recipe.title,
+                    rating = recipe.rating,
                     imageHeight = 260.dp,
                     onclick = {
                         onClickRecipeListItem(recipe.id)
-                    }
+                    },
                 )
             }
         }
@@ -55,7 +61,11 @@ fun RecipeList(
 }
 
 @Composable
-fun DisplayCategoryChips(state: RecipeListState) {
+fun DisplayCategoryChips(
+    state: RecipeListState,
+    getFoodCategory: (name: String) -> Category?,
+    onTriggerEvent: (RecipeListEvents) -> Unit
+) {
     LazyHorizontalGrid(
         modifier = Modifier.height(85.dp),
         rows = GridCells.Fixed(1),
@@ -68,7 +78,10 @@ fun DisplayCategoryChips(state: RecipeListState) {
                 isHorizontal = true,
                 chipWidth = 150.dp,
                 onSelected = {
-
+                    val category = getFoodCategory(it)
+                    category?.let {
+                        onTriggerEvent(RecipeListEvents.OnSelectCategory(category))
+                    }
                 })
         }
     }
@@ -84,7 +97,10 @@ fun DisplayCategoryChips(state: RecipeListState) {
                 isTopLevel = false,
                 chipWidth = 100.dp,
                 onSelected = {
-
+                    val category = getFoodCategory(it)
+                    category?.let {
+                        onTriggerEvent(RecipeListEvents.OnSelectCategory(category))
+                    }
                 })
         }
     }

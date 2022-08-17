@@ -8,7 +8,7 @@ class CategoryUtil {
             Category.DONUT
         )
     }
-     fun getAllCategories():List<Category>{
+     fun getTopCategories():List<Category>{
          return listOf(
              Category.CHICKEN,
              Category.BEEF,
@@ -16,9 +16,21 @@ class CategoryUtil {
              Category.VEGETARIAN,
              Category.MILK,
              Category.VEGAN,
-             Category.ERROR
+             //Category.ERROR
          )
      }
+
+    fun getAllCategories():List<Category>{
+        return listOf(
+            Category.CHICKEN,
+            Category.BEEF,
+            Category.DESSERT,
+            Category.VEGETARIAN,
+            Category.MILK,
+            Category.VEGAN,
+            //Category.ERROR
+        )
+    }
 
     fun getCategory(value: String): Category? {
         val map = Category.values().associateBy(Category::categoryName)

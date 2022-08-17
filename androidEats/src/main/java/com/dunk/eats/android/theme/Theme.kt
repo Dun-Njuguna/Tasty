@@ -41,7 +41,6 @@ fun AppTheme(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 10.dp, start = 5.dp, end = 5.dp)
                 .background(color = Grey1)
         ){
             content()

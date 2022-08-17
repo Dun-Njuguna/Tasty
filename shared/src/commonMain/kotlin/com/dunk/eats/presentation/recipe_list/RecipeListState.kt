@@ -9,5 +9,6 @@ data class RecipeListState (
     val query:String = "",
     val recipes: List<Recipe> = listOf(),
     val topCategories: List<Category> = listOf(),
-    val newCategories: List<Category> = listOf()
+    val newCategories: List<Category> = listOf(),
+    val selectedCategory: Category? = null
 )
