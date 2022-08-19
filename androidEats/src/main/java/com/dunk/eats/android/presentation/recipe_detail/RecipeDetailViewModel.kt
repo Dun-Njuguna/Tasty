@@ -9,6 +9,8 @@ import com.dunk.eats.datasource.network.recipeService.RecipeService
 import com.dunk.eats.domain.model.Recipe
 import com.dunk.eats.domain.util.DatetimeUtil
 import com.dunk.eats.interactors.recipe_detail.GetRecipe
+import com.dunk.eats.presentation.recipe_detail.RecipeDetailEvents
+import com.dunk.eats.presentation.recipe_detail.RecipeDetailState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -22,28 +24,44 @@ class RecipeDetailViewModel @Inject constructor(
     private val getRecipe: GetRecipe
 ) : ViewModel() {
 
-    val recipe: MutableState<Recipe?> = mutableStateOf(null)
+    val state: MutableState<RecipeDetailState> = mutableStateOf(RecipeDetailState())
 
     init {
         savedStateHandle.get<Int>("recipeId")?.let { recipeId ->
-            getRecipe(recipeId = recipeId)
+            onTriggerEvent(RecipeDetailEvents.GetRecipe(recipeId))
         }
     }
 
+    fun onTriggerEvent(event: RecipeDetailEvents){
+         when(event){
+             is RecipeDetailEvents.GetRecipe -> {
+                 getRecipe(recipeId = event.recipeId)
+             }
+             else -> {
+                 handleError("Invalid Event")
+             }
+         }
+    }
+
+
     private fun getRecipe(recipeId:Int){
-        println("Recipe list view model:..id.....${recipeId}")
         getRecipe.execute(
             recipeId = recipeId
         ).onEach { dataState ->
+            state.value = state.value.copy(dataState.isLoading)
             dataState.data?.let {
-                recipe.value = it
-                println("Recipe list view model:.......${it.title}")
-                println("Recipe list view model:.......${it.ingredients}")
-                println("Recipe list view model:.......${DatetimeUtil().humanizeDatetime(it.dateAdded)}")
+                state.value = state.value.copy(recipe = it)
             }
 
-            println("Recipe list view model:......loading${dataState.isLoading}...message${dataState.message }...data${dataState.data}")
+            dataState.message?.let { message ->
+                handleError(message)
+            }
+
         }.launchIn(viewModelScope)
+    }
+
+    private fun handleError(error: String) {
+        TODO("Not yet implemented")
     }
 
 }
