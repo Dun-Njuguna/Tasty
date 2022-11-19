@@ -5,22 +5,26 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dunk.eats.domain.model.ErrorMessage
 import com.dunk.eats.domain.model.Recipe
+import com.dunk.eats.domain.model.UIComponentType
 import com.dunk.eats.interactors.recipe_categories.Category
 import com.dunk.eats.interactors.recipe_list.SearchRecipes
-import com.dunk.eats.interactors.recipe_categories.CategoryUtil
+import com.dunk.eats.interactors.recipe_categories.CategoryTypes
 import com.dunk.eats.presentation.recipe_list.RecipeListEvents
 import com.dunk.eats.presentation.recipe_list.RecipeListState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 @HiltViewModel
 class RecipeListViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val searchRecipes:SearchRecipes,
-    private val categoryUtil: CategoryUtil
+    private val categoryTypes: CategoryTypes
 ) : ViewModel() {
 
      val state: MutableState<RecipeListState> = mutableStateOf(RecipeListState())
@@ -50,13 +54,19 @@ class RecipeListViewModel @Inject constructor(
                 onSelectCategory(event.category)
             }
             else -> {
-                handleError("Invalid event")
+                addErrorToQueue(
+                    ErrorMessage.Builder()
+                        .id(UUID.randomUUID().toString())
+                        .title("Error")
+                        .uiComponentType(UIComponentType.Dialog)
+                        .description("Invalid event")
+                )
             }
         }
     }
 
     fun getFoodCategory(categoryName:String): Category? {
-        return categoryUtil.getCategory(categoryName)
+        return categoryTypes.getCategory(categoryName)
     }
 
     private fun onSelectCategory(category: Category) {
@@ -76,11 +86,11 @@ class RecipeListViewModel @Inject constructor(
     }
 
     private fun loadNewCategories(){
-        state.value = state.value.copy(newCategories = categoryUtil.getNewCategories())
+        state.value = state.value.copy(newCategories = categoryTypes.getNewCategories())
     }
 
     private fun loadTopCategories(){
-        state.value = state.value.copy(topCategories = categoryUtil.getAllCategories().subList(0, 4))
+        state.value = state.value.copy(topCategories = categoryTypes.getAllCategories().subList(0, 4))
     }
 
     private fun loadRecipes(){
@@ -94,8 +104,14 @@ class RecipeListViewModel @Inject constructor(
                 appendRecipes(recipes)
             }
 
-            dataState.message?.let { message ->
-                handleError(message)
+            dataState.errorMessage?.let { message ->
+                addErrorToQueue(
+                    ErrorMessage.Builder()
+                        .id(UUID.randomUUID().toString())
+                        .title(message.title)
+                        .uiComponentType(UIComponentType.Dialog)
+                        .description(message.description ?: "Unknown error")
+                )
             }
         }.launchIn(viewModelScope)
     }
@@ -106,9 +122,9 @@ class RecipeListViewModel @Inject constructor(
         state.value = state.value.copy(recipes = curr)
     }
 
-    private fun handleError(errorMessage: String) {
+    private fun addErrorToQueue(error: ErrorMessage.Builder) {
         val queue = state.value.errorQueue
-        queue.add(errorMessage)
+        queue.add(error.build())
         state.value = state.value.copy(errorQueue = queue)
     }
 

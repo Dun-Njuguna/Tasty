@@ -1,6 +1,6 @@
 package com.dunk.eats.interactors.recipe_categories
 
-class CategoryUtil {
+class CategoryTypes {
     fun getNewCategories():List<Category>{
         return listOf(
             Category.SOUP,

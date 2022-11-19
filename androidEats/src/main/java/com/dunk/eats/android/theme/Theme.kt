@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.dunk.eats.android.presentation.components.CircularProgressBar
 import com.dunk.eats.android.presentation.components.DisplayQueueAsDialog
+import com.dunk.eats.domain.model.ErrorMessage
 import com.dunk.eats.domain.util.Queue
 
 private val LightThemeColors = lightColors(
@@ -30,7 +31,7 @@ private val LightThemeColors = lightColors(
 @Composable
 fun AppTheme(
     displayProgressBar: Boolean,
-    dialogQueue: Queue<String> = Queue(mutableListOf()),
+    dialogQueue: Queue<ErrorMessage> = Queue(mutableListOf()),
     content: @Composable () -> Unit,
 
     ) {

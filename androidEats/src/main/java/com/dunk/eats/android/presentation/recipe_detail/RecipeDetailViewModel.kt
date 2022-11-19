@@ -5,22 +5,21 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dunk.eats.datasource.network.recipeService.RecipeService
-import com.dunk.eats.domain.model.Recipe
-import com.dunk.eats.domain.util.DatetimeUtil
+import com.dunk.eats.domain.model.ErrorMessage
+import com.dunk.eats.domain.model.UIComponentType
 import com.dunk.eats.interactors.recipe_detail.GetRecipe
 import com.dunk.eats.presentation.recipe_detail.RecipeDetailEvents
 import com.dunk.eats.presentation.recipe_detail.RecipeDetailState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
 
 @ExperimentalStdlibApi
 @HiltViewModel
 class RecipeDetailViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle,
     private val getRecipe: GetRecipe
 ) : ViewModel() {
 
@@ -38,11 +37,16 @@ class RecipeDetailViewModel @Inject constructor(
                  getRecipe(recipeId = event.recipeId)
              }
              else -> {
-                 handleError("Invalid Event")
+                 addErrorToQueue(
+                     ErrorMessage.Builder()
+                         .id(UUID.randomUUID().toString())
+                         .title("Error")
+                         .uiComponentType(UIComponentType.Dialog)
+                         .description("Invalid event")
+                 )
              }
          }
     }
-
 
     private fun getRecipe(recipeId:Int){
         getRecipe.execute(
@@ -53,16 +57,22 @@ class RecipeDetailViewModel @Inject constructor(
                 state.value = state.value.copy(recipe = it)
             }
 
-            dataState.message?.let { message ->
-                handleError(message)
+            dataState.errorMessage?.let { message ->
+                addErrorToQueue(
+                    ErrorMessage.Builder()
+                        .id(UUID.randomUUID().toString())
+                        .title(message.title)
+                        .uiComponentType(UIComponentType.Dialog)
+                        .description(message.description ?: "Unknown error")
+                )
             }
 
         }.launchIn(viewModelScope)
     }
 
-    private fun handleError(errorMessage: String) {
+    private fun addErrorToQueue(error: ErrorMessage.Builder) {
         val queue = state.value.errorQueue
-        queue.add(errorMessage)
+        queue.add(error.build())
         state.value = state.value.copy(errorQueue = queue)
     }
 
