@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.dunk.eats.domain.model.ErrorMessage
 import com.dunk.eats.domain.model.Recipe
 import com.dunk.eats.domain.model.UIComponentType
+import com.dunk.eats.domain.util.ErrorMessageQueueUtil
 import com.dunk.eats.interactors.recipe_categories.Category
 import com.dunk.eats.interactors.recipe_list.SearchRecipes
 import com.dunk.eats.interactors.recipe_categories.CategoryTypes
@@ -123,9 +124,14 @@ class RecipeListViewModel @Inject constructor(
     }
 
     private fun addErrorToQueue(error: ErrorMessage.Builder) {
-        val queue = state.value.errorQueue
-        queue.add(error.build())
-        state.value = state.value.copy(errorQueue = queue)
+        if (!ErrorMessageQueueUtil().isErrorUnique(
+                queue = state.value.errorQueue,
+                message = error.build()
+        )) {
+            val queue = state.value.errorQueue
+            queue.add(error.build())
+            state.value = state.value.copy(errorQueue = queue)
+        }
     }
 
 }
