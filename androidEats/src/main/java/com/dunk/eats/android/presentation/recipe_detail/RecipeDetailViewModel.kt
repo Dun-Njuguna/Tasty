@@ -60,8 +60,10 @@ class RecipeDetailViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    private fun handleError(error: String) {
-        TODO("Not yet implemented")
+    private fun handleError(errorMessage: String) {
+        val queue = state.value.errorQueue
+        queue.add(errorMessage)
+        state.value = state.value.copy(errorQueue = queue)
     }
 
 }

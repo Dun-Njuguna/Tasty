@@ -1,6 +1,7 @@
 package com.dunk.eats.presentation.recipe_list
 
 import com.dunk.eats.domain.model.Recipe
+import com.dunk.eats.domain.util.Queue
 import com.dunk.eats.interactors.recipe_categories.Category
 
 data class RecipeListState (
@@ -10,5 +11,6 @@ data class RecipeListState (
     val recipes: List<Recipe> = listOf(),
     val topCategories: List<Category> = listOf(),
     val newCategories: List<Category> = listOf(),
-    val selectedCategory: Category? = null
+    val selectedCategory: Category? = null,
+    val errorQueue: Queue<String> = Queue(mutableListOf())
 )

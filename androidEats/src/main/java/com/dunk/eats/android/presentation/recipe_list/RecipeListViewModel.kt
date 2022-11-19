@@ -107,7 +107,9 @@ class RecipeListViewModel @Inject constructor(
     }
 
     private fun handleError(errorMessage: String) {
-
+        val queue = state.value.errorQueue
+        queue.add(errorMessage)
+        state.value = state.value.copy(errorQueue = queue)
     }
 
 }
