@@ -33,7 +33,7 @@ class RecipeBrowseViewModel @Inject constructor(
     fun onTriggerEvent(event: RecipeBrowseEvents){
         when(event){
             RecipeBrowseEvents.LoadCategories -> {
-                //loadRecipes()
+                loadRecipes()
                 loadPopularCategories()
             }
 

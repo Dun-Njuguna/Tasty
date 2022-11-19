@@ -28,6 +28,7 @@ fun RecipeView(
                     .fillMaxWidth()
                     .padding(8.dp)
             ) {
+
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -66,6 +67,7 @@ fun RecipeView(
                         style = MaterialTheme.typography.body1
                     )
                 }
+
             }
         }
      }

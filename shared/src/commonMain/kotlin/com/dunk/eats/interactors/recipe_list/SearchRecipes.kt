@@ -17,8 +17,8 @@ class SearchRecipes(
     ): Flow<DataState<List<Recipe>>> = flow {
         emit(DataState.loading())
         try {
-//            val recipes = recipeService.search(page = page, query = query)
-//            recipeCache.insert(recipes)
+            val recipes = recipeService.search(page = page, query = query)
+            recipeCache.insert(recipes)
             val cacheResult = if (query.isBlank()){
                 recipeCache.getAll(page = page)
             }else{

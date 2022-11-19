@@ -17,7 +17,6 @@ import com.dunk.eats.presentation.recipe_detail.RecipeDetailState
 fun RecipeDetailScreen(
     state: RecipeDetailState,
     onTriggerEvent: (RecipeDetailEvents) -> Unit,
-
 ){
     AppTheme(displayProgressBar = state.isLoading) {
         if (state.recipe  == null && state.isLoading){
