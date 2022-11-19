@@ -17,6 +17,9 @@ class SearchRecipes(
     ): Flow<DataState<List<Recipe>>> = flow {
         emit(DataState.loading())
         try {
+            if (query == "error"){
+                throw Exception("Clicked on error category")
+            }
             val recipes = recipeService.search(page = page, query = query)
             recipeCache.insert(recipes)
             val cacheResult = if (query.isBlank()){

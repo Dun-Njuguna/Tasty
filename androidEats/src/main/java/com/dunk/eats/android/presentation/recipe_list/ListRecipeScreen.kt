@@ -22,7 +22,10 @@ fun ListRecipeScreen(
     getFoodCategory: (name:String) -> Category?,
     onClickRecipeListItem: (Int) -> Unit
 ) {
-    AppTheme(displayProgressBar = state.isLoading) {
+    AppTheme(
+        displayProgressBar = state.isLoading,
+        dialogQueue = state.errorQueue
+    ) {
         Column(
             modifier = Modifier.padding(top = 5.dp)
         ) {

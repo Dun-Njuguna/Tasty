@@ -18,7 +18,10 @@ fun RecipeDetailScreen(
     state: RecipeDetailState,
     onTriggerEvent: (RecipeDetailEvents) -> Unit,
 ){
-    AppTheme(displayProgressBar = state.isLoading) {
+    AppTheme(
+        displayProgressBar = state.isLoading,
+        dialogQueue = state.errorQueue
+    ) {
         if (state.recipe  == null && state.isLoading){
 
         }

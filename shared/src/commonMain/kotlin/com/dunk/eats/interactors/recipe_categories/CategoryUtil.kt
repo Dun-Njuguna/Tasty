@@ -8,17 +8,6 @@ class CategoryUtil {
             Category.DONUT
         )
     }
-     fun getTopCategories():List<Category>{
-         return listOf(
-             Category.CHICKEN,
-             Category.BEEF,
-             Category.DESSERT,
-             Category.VEGETARIAN,
-             Category.MILK,
-             Category.VEGAN,
-             //Category.ERROR
-         )
-     }
 
     fun getAllCategories():List<Category>{
         return listOf(
@@ -28,7 +17,7 @@ class CategoryUtil {
             Category.VEGETARIAN,
             Category.MILK,
             Category.VEGAN,
-            //Category.ERROR
+            Category.ERROR
         )
     }
 

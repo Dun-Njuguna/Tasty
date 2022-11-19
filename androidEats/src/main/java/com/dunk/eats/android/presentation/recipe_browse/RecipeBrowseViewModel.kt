@@ -99,11 +99,13 @@ class RecipeBrowseViewModel @Inject constructor(
     }
 
     private fun loadPopularCategories(){
-        state.value = state.value.copy(popularCategories = categoryUtil.getAllCategories())
+        state.value = state.value.copy(categories = categoryUtil.getAllCategories())
     }
 
     private fun handleError(errorMessage: String) {
-
+        val queue = state.value.errorQueue
+        queue.add(errorMessage)
+        state.value = state.value.copy(errorQueue = queue)
     }
 
 }

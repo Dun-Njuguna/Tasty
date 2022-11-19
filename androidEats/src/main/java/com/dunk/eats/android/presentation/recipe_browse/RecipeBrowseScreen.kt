@@ -25,7 +25,10 @@ fun RecipeBrowseScreen(
     getFoodCategory: (name:String) -> Category?,
     onClickRecipeBrowseItem: (Int) -> Unit
 ) {
-    AppTheme(displayProgressBar = state.isLoading) {
+    AppTheme(
+        displayProgressBar = state.isLoading,
+        dialogQueue = state.errorQueue
+    ) {
         Column(
             modifier = Modifier
                 .padding(top = 8.dp),
@@ -71,7 +74,7 @@ fun DisplayPopularCategories(
         showTitle("Top categories", this)
 
         itemsIndexed(
-            items = state.popularCategories,
+            items = state.categories.filter { it.isPopular },
         ) { index, item ->
             PreviewImageCard(
                 imageUrl = item.imageUrl,
@@ -88,7 +91,7 @@ fun DisplayPopularCategories(
 
         showTitle("All categories", this)
 
-        itemsIndexed(items = state.popularCategories) { index, item ->
+        itemsIndexed(items = state.categories) { index, item ->
             PreviewImageCard(
                 imageUrl = item.imageUrl,
                 title = item.categoryName,
