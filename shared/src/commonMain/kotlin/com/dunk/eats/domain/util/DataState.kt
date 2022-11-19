@@ -1,7 +1,9 @@
 package com.dunk.eats.domain.util
 
+import com.dunk.eats.domain.model.ErrorMessage
+
 class DataState<T>(
-    val message:String? = null,
+    val message:ErrorMessage ? = null,
     val data:T? = null,
     val isLoading:Boolean = false
 ) {
@@ -10,7 +12,7 @@ class DataState<T>(
         fun<T> loading() = DataState<T>(isLoading = true)
 
         fun<T> error(
-            message:String
+            message:ErrorMessage
         ): DataState<T>{
              return DataState(
                  message = message
@@ -18,7 +20,7 @@ class DataState<T>(
         }
 
         fun<T> data(
-            message:String? = null,
+            message:ErrorMessage? = null,
             data:T? = null
         ): DataState<T>{
             return  DataState(
