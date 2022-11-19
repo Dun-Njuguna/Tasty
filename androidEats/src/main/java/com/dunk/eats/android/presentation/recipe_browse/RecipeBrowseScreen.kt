@@ -16,8 +16,9 @@ import com.dunk.eats.android.theme.AppTheme
 import com.dunk.eats.interactors.recipe_categories.Category
 import com.dunk.eats.presentation.recipe_browse.RecipeBrowseEvents
 import com.dunk.eats.presentation.recipe_browse.RecipeBrowseState
+import com.dunk.eats.presentation.recipe_list.RecipeListEvents
 
-@OptIn(ExperimentalComposeUiApi::class, androidx.compose.material.ExperimentalMaterialApi::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun RecipeBrowseScreen(
     state: RecipeBrowseState,
@@ -27,7 +28,13 @@ fun RecipeBrowseScreen(
 ) {
     AppTheme(
         displayProgressBar = state.isLoading,
-        dialogQueue = state.errorQueue
+        dialogQueue = state.errorQueue,
+        onRemoveMessageAtHead = {
+            onTriggerEvent(RecipeBrowseEvents.RemoveHeadMessageFromQueue)
+            if (state.query == "error"){
+                onTriggerEvent(RecipeBrowseEvents.OnUpdateQuery(""))
+            }
+        }
     ) {
         Column(
             modifier = Modifier

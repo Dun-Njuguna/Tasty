@@ -7,6 +7,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.dunk.eats.android.presentation.recipe_list.components.RecipeList
 import com.dunk.eats.android.theme.AppTheme
+import com.dunk.eats.domain.model.ErrorMessage
+import com.dunk.eats.domain.util.Queue
 import com.dunk.eats.interactors.recipe_categories.Category
 import com.dunk.eats.presentation.recipe_list.RecipeListEvents
 import com.dunk.eats.presentation.recipe_list.RecipeListState
@@ -24,7 +26,10 @@ fun ListRecipeScreen(
 ) {
     AppTheme(
         displayProgressBar = state.isLoading,
-        dialogQueue = state.errorQueue
+        dialogQueue = state.errorQueue,
+        onRemoveMessageAtHead = {
+            onTriggerEvent(RecipeListEvents.RemoveHeadMessageFromQueue)
+        }
     ) {
         Column(
             modifier = Modifier.padding(top = 5.dp)

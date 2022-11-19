@@ -5,10 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dunk.eats.domain.model.ErrorMessage
-import com.dunk.eats.domain.model.Recipe
-import com.dunk.eats.domain.model.UIComponentType
+import com.dunk.eats.domain.model.*
 import com.dunk.eats.domain.util.ErrorMessageQueueUtil
+import com.dunk.eats.domain.util.Queue
 import com.dunk.eats.interactors.recipe_categories.Category
 import com.dunk.eats.interactors.recipe_list.SearchRecipes
 import com.dunk.eats.interactors.recipe_categories.CategoryTypes
@@ -54,6 +53,9 @@ class RecipeListViewModel @Inject constructor(
             is RecipeListEvents.OnSelectCategory  -> {
                 onSelectCategory(event.category)
             }
+            is RecipeListEvents.RemoveHeadMessageFromQueue -> {
+                removeMessageAtHead()
+            }
             else -> {
                 addErrorToQueue(
                     ErrorMessage.Builder()
@@ -61,6 +63,7 @@ class RecipeListViewModel @Inject constructor(
                         .title("Error")
                         .uiComponentType(UIComponentType.Dialog)
                         .description("Invalid event")
+                        .positive(PositiveAction(positiveBtnTxt = "Ok", onPositiveAction = {}))
                 )
             }
         }
@@ -112,6 +115,7 @@ class RecipeListViewModel @Inject constructor(
                         .title(message.title)
                         .uiComponentType(UIComponentType.Dialog)
                         .description(message.description ?: "Unknown error")
+                        .positive(PositiveAction(positiveBtnTxt = "Ok", onPositiveAction = {}))
                 )
             }
         }.launchIn(viewModelScope)
@@ -131,6 +135,18 @@ class RecipeListViewModel @Inject constructor(
             val queue = state.value.errorQueue
             queue.add(error.build())
             state.value = state.value.copy(errorQueue = queue)
+        }
+    }
+
+    private fun removeMessageAtHead() {
+        try {
+            val queue = state.value.errorQueue
+            queue.remove()
+            // Forcing the app to recompose and remove the dialog since the queue is empty
+            state.value = state.value.copy(errorQueue = Queue(mutableListOf()))
+            state.value = state.value.copy(errorQueue = queue)
+        }catch (e: Exception){
+            // Nothing to remove queue is empty
         }
     }
 

@@ -7,6 +7,8 @@ sealed class RecipeBrowseEvents {
     object LoadCategories: RecipeBrowseEvents()
     object NextPage: RecipeBrowseEvents()
     object NewSearch: RecipeBrowseEvents()
+    object RemoveHeadMessageFromQueue: RecipeBrowseEvents()
+
     data class OnUpdateQuery(val query:String): RecipeBrowseEvents()
     data class OnSelectCategory(val category: Category): RecipeBrowseEvents()
 }

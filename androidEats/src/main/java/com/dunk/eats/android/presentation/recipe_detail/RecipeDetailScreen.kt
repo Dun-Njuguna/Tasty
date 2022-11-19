@@ -11,6 +11,7 @@ import com.dunk.eats.android.theme.AppTheme
 import com.dunk.eats.domain.model.Recipe
 import com.dunk.eats.presentation.recipe_detail.RecipeDetailEvents
 import com.dunk.eats.presentation.recipe_detail.RecipeDetailState
+import com.dunk.eats.presentation.recipe_list.RecipeListEvents
 
 @OptIn(ExperimentalComposeUiApi::class, androidx.compose.material.ExperimentalMaterialApi::class)
 @Composable
@@ -20,7 +21,10 @@ fun RecipeDetailScreen(
 ){
     AppTheme(
         displayProgressBar = state.isLoading,
-        dialogQueue = state.errorQueue
+        dialogQueue = state.errorQueue,
+        onRemoveMessageAtHead = {
+            onTriggerEvent(RecipeDetailEvents.RemoveHeadMessageFromQueue)
+        }
     ) {
         if (state.recipe  == null && state.isLoading){
 

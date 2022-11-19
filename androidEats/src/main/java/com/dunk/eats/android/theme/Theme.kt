@@ -3,7 +3,9 @@ package com.dunk.eats.android.theme
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.*
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -32,20 +34,23 @@ private val LightThemeColors = lightColors(
 fun AppTheme(
     displayProgressBar: Boolean,
     dialogQueue: Queue<ErrorMessage> = Queue(mutableListOf()),
-    content: @Composable () -> Unit,
-
-    ) {
+    onRemoveMessageAtHead: () -> Unit,
+    content: @Composable () -> Unit
+) {
     MaterialTheme(
         colors = LightThemeColors,
         typography = QuickSandTypography,
         shapes = AppShapes
-    ){
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(color = Grey1)
-        ){
-            DisplayQueueAsDialog(dialogQueue = dialogQueue)
+        ) {
+            DisplayQueueAsDialog(
+                dialogQueue = dialogQueue,
+                onRemoveMessageAtHead = onRemoveMessageAtHead
+            )
             content()
             CircularProgressBar(isDisplayed = displayProgressBar, verticalBias = 0.5f)
         }

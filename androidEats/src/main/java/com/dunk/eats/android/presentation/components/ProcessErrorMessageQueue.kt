@@ -6,9 +6,17 @@ import com.dunk.eats.domain.util.Queue
 
 @Composable
 fun DisplayQueueAsDialog(
-    dialogQueue: Queue<ErrorMessage>?
+    dialogQueue: Queue<ErrorMessage>?,
+    onRemoveMessageAtHead: () -> Unit,
 ) {
-    dialogQueue?.peek()?.let { message ->
-        AppDialog(title = message.title, description = message.description)
+    dialogQueue?.peek()?.let { obj ->
+        AppDialog(
+            onDismiss = obj.onDismiss,
+            title = obj.title,
+            description = obj.description,
+            negativeAction = obj.negativeAction,
+            positiveAction = obj.positiveAction,
+            onRemoveMessageAtHead = onRemoveMessageAtHead
+        )
     }
 }

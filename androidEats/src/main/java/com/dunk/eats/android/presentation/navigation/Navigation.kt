@@ -52,7 +52,7 @@ fun Navigation() {
         else -> true
     }
 
-    AppTheme(displayProgressBar = false) {
+    AppTheme(displayProgressBar = false, onRemoveMessageAtHead = {}) {
         Scaffold(
             bottomBar = {
                 AnimatedVisibility(
