@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.dunk.eats.domain.model.*
 import com.dunk.eats.domain.util.ErrorMessageQueueUtil
 import com.dunk.eats.domain.util.Queue
-import com.dunk.eats.interactors.recipe_categories.Category
+import com.dunk.eats.interactors.recipe_categories.FoodCategories
 import com.dunk.eats.interactors.recipe_list.SearchRecipes
 import com.dunk.eats.interactors.recipe_categories.CategoryTypes
 import com.dunk.eats.presentation.recipe_list.RecipeListEvents
@@ -48,10 +48,10 @@ class RecipeListViewModel @Inject constructor(
                 newSearch()
             }
             is RecipeListEvents.OnUpdateQuery  -> {
-                state.value = state.value.copy(query =  event.query, selectedCategory = null)
+                state.value = state.value.copy(query =  event.query, selectedFoodCategories = null)
             }
             is RecipeListEvents.OnSelectCategory  -> {
-                onSelectCategory(event.category)
+                onSelectCategory(event.foodCategories)
             }
             is RecipeListEvents.RemoveHeadMessageFromQueue -> {
                 removeMessageAtHead()
@@ -69,12 +69,12 @@ class RecipeListViewModel @Inject constructor(
         }
     }
 
-    fun getFoodCategory(categoryName:String): Category? {
+    fun getFoodCategory(categoryName:String): FoodCategories? {
         return categoryTypes.getCategory(categoryName)
     }
 
-    private fun onSelectCategory(category: Category) {
-        state.value = state.value.copy(selectedCategory = category, query = category.categoryName)
+    private fun onSelectCategory(foodCategories: FoodCategories) {
+        state.value = state.value.copy(selectedFoodCategories = foodCategories, query = foodCategories.categoryName)
         newSearch()
     }
 
@@ -101,7 +101,7 @@ class RecipeListViewModel @Inject constructor(
         searchRecipes.execute(
             page = state.value.page,
             query = state.value.query,
-        ).onEach { dataState ->
+        ).collectFlow(viewModelScope){ dataState ->
             state.value= state.value.copy(isLoading = dataState.isLoading)
 
             dataState.data?.let { recipes ->
@@ -118,7 +118,7 @@ class RecipeListViewModel @Inject constructor(
                         .positive(PositiveAction(positiveBtnTxt = "Ok", onPositiveAction = {}))
                 )
             }
-        }.launchIn(viewModelScope)
+        }
     }
 
     private fun appendRecipes(recipes: List<Recipe>){

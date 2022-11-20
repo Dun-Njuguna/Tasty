@@ -16,8 +16,8 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import com.dunk.eats.android.presentation.components.PreviewImageCard
-import com.dunk.eats.datasource.network.recipeService.RecipeServiceImp.Companion.RECIPE_PAGINATION_PAGE_SIZE
-import com.dunk.eats.interactors.recipe_categories.Category
+import com.dunk.eats.interactors.recipe_categories.FoodCategories
+import com.dunk.eats.interactors.recipe_list.SearchRecipes.Companion.RECIPE_PAGINATION_PAGE_SIZE
 import com.dunk.eats.presentation.recipe_list.RecipeListEvents
 import com.dunk.eats.presentation.recipe_list.RecipeListState
 
@@ -27,7 +27,7 @@ fun RecipeList(
     state:RecipeListState,
     onTriggerEvent: (RecipeListEvents) -> Unit,
     onClickRecipeListItem:(Int) -> Unit,
-    getFoodCategory: (name:String) -> Category?,
+    getFoodFoodCategories: (name:String) -> FoodCategories?,
 ) {
     if (state.isLoading && state.recipes.isEmpty()){
 
@@ -38,7 +38,7 @@ fun RecipeList(
     else {
         LazyColumn {
             item {
-                DisplayCategoryChips(state, getFoodCategory, onTriggerEvent)
+                DisplayCategoryChips(state, getFoodFoodCategories, onTriggerEvent)
             }
             itemsIndexed(
                 items = state.recipes
@@ -63,7 +63,7 @@ fun RecipeList(
 @Composable
 fun DisplayCategoryChips(
     state: RecipeListState,
-    getFoodCategory: (name: String) -> Category?,
+    getFoodFoodCategories: (name: String) -> FoodCategories?,
     onTriggerEvent: (RecipeListEvents) -> Unit
 ) {
     LazyHorizontalGrid(
@@ -73,12 +73,12 @@ fun DisplayCategoryChips(
     ) {
         itemsIndexed(items = state.newCategories) { index, item ->
             CategoryChip(
-                category = item,
+                foodCategories = item,
                 isTopLevel = true,
                 isHorizontal = true,
                 chipWidth = 150.dp,
                 onSelected = {
-                    val category = getFoodCategory(it)
+                    val category = getFoodFoodCategories(it)
                     category?.let {
                         onTriggerEvent(RecipeListEvents.OnSelectCategory(category))
                     }
@@ -93,11 +93,11 @@ fun DisplayCategoryChips(
     ) {
         itemsIndexed(items = state.topCategories) { index, item ->
             CategoryChip(
-                category = item,
+                foodCategories = item,
                 isTopLevel = false,
                 chipWidth = 100.dp,
                 onSelected = {
-                    val category = getFoodCategory(it)
+                    val category = getFoodFoodCategories(it)
                     category?.let {
                         onTriggerEvent(RecipeListEvents.OnSelectCategory(category))
                     }

@@ -1,9 +1,9 @@
 package com.dunk.eats.android.di
 
-import com.dunk.eats.android.MainActivity.Companion.BASE_URL
 import com.dunk.eats.datasource.network.KtorClientFactory
 import com.dunk.eats.datasource.network.recipeService.RecipeService
 import com.dunk.eats.datasource.network.recipeService.RecipeServiceImp
+import com.dunk.eats.datasource.network.recipeService.RecipeServiceImp.Companion.BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

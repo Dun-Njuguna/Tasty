@@ -8,8 +8,8 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import com.dunk.eats.android.presentation.components.PreviewImageCard
-import com.dunk.eats.datasource.network.recipeService.RecipeServiceImp.Companion.RECIPE_PAGINATION_PAGE_SIZE
 import com.dunk.eats.domain.model.Recipe
+import com.dunk.eats.interactors.recipe_list.SearchRecipes.Companion.RECIPE_PAGINATION_PAGE_SIZE
 
 @OptIn(ExperimentalMaterialApi::class, androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable

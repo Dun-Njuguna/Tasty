@@ -11,7 +11,7 @@ import com.dunk.eats.domain.model.Recipe
 import com.dunk.eats.domain.model.UIComponentType
 import com.dunk.eats.domain.util.ErrorMessageQueueUtil
 import com.dunk.eats.domain.util.Queue
-import com.dunk.eats.interactors.recipe_categories.Category
+import com.dunk.eats.interactors.recipe_categories.FoodCategories
 import com.dunk.eats.interactors.recipe_categories.CategoryTypes
 import com.dunk.eats.interactors.recipe_list.SearchRecipes
 import com.dunk.eats.presentation.recipe_browse.RecipeBrowseEvents
@@ -53,7 +53,7 @@ class RecipeBrowseViewModel @Inject constructor(
                 state.value = state.value.copy(query =  event.query)
             }
             is RecipeBrowseEvents.OnSelectCategory  -> {
-                onSelectCategory(event.category)
+                onSelectCategory(event.foodCategories)
             }
             is RecipeBrowseEvents.RemoveHeadMessageFromQueue -> {
                 removeMessageAtHead()
@@ -71,12 +71,12 @@ class RecipeBrowseViewModel @Inject constructor(
         }
     }
 
-    fun getFoodCategory(categoryName:String): Category? {
+    fun getFoodCategory(categoryName:String): FoodCategories? {
         return categoryTypes.getCategory(categoryName)
     }
 
-    private fun onSelectCategory(category: Category) {
-        state.value = state.value.copy(selectedCategory = category, query = category.categoryName)
+    private fun onSelectCategory(foodCategories: FoodCategories) {
+        state.value = state.value.copy(selectedFoodCategories = foodCategories, query = foodCategories.categoryName)
         newSearch()
     }
 
@@ -95,7 +95,7 @@ class RecipeBrowseViewModel @Inject constructor(
         searchRecipes.execute(
             page = state.value.page,
             query = state.value.query,
-        ).onEach { dataState ->
+        ).collectFlow(viewModelScope) { dataState ->
             state.value= state.value.copy(isLoading = dataState.isLoading)
 
             dataState.data?.let { recipes ->
@@ -112,7 +112,7 @@ class RecipeBrowseViewModel @Inject constructor(
                         .positive(PositiveAction(positiveBtnTxt = "Ok", onPositiveAction = {}))
                 )
             }
-        }.launchIn(viewModelScope)
+        }
     }
 
     private fun appendRecipes(recipes: List<Recipe>){

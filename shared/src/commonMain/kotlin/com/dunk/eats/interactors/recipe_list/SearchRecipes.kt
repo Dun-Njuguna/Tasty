@@ -6,6 +6,8 @@ import com.dunk.eats.domain.model.ErrorMessage
 import com.dunk.eats.domain.model.Recipe
 import com.dunk.eats.domain.model.UIComponentType
 import com.dunk.eats.domain.util.DataState
+import com.dunk.eats.domain.util.FlowHelper
+import com.dunk.eats.domain.util.asFlowHelper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -16,11 +18,11 @@ class SearchRecipes(
     fun execute(
         page: Int,
         query: String
-    ): Flow<DataState<List<Recipe>>> = flow {
+    ): FlowHelper<DataState<List<Recipe>>> = flow {
         emit(DataState.loading())
         try {
             if (query == "error"){
-                throw Exception("Clicked on error category")
+                throw Exception("Clicked on error foodCategories")
             }
             val recipes = recipeService.search(page = page, query = query)
             recipeCache.insert(recipes)
@@ -42,5 +44,9 @@ class SearchRecipes(
                 )
             )
         }
+    }.asFlowHelper()
+
+    companion object{
+        const val RECIPE_PAGINATION_PAGE_SIZE = 30
     }
 }

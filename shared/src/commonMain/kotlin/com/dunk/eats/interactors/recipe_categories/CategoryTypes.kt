@@ -1,28 +1,28 @@
 package com.dunk.eats.interactors.recipe_categories
 
 class CategoryTypes {
-    fun getNewCategories():List<Category>{
+    fun getNewCategories():List<FoodCategories>{
         return listOf(
-            Category.SOUP,
-            Category.PIZZA,
-            Category.DONUT
+            FoodCategories.SOUP,
+            FoodCategories.PIZZA,
+            FoodCategories.DONUT
         )
     }
 
-    fun getAllCategories():List<Category>{
+    fun getAllCategories():List<FoodCategories>{
         return listOf(
-            Category.CHICKEN,
-            Category.BEEF,
-            Category.DESSERT,
-            Category.VEGETARIAN,
-            Category.MILK,
-            Category.VEGAN,
-            Category.ERROR
+            FoodCategories.CHICKEN,
+            FoodCategories.BEEF,
+            FoodCategories.DESSERT,
+            FoodCategories.VEGETARIAN,
+            FoodCategories.MILK,
+            FoodCategories.VEGAN,
+            FoodCategories.ERROR
         )
     }
 
-    fun getCategory(value: String): Category? {
-        val map = Category.values().associateBy(Category::categoryName)
+    fun getCategory(value: String): FoodCategories? {
+        val map = FoodCategories.values().associateBy(FoodCategories::categoryName)
         return map[value]
     }
 }

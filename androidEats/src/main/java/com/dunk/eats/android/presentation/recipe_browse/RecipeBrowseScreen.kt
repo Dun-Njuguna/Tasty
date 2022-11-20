@@ -13,17 +13,16 @@ import com.dunk.eats.android.presentation.components.PreviewImageCard
 import com.dunk.eats.android.presentation.recipe_browse.components.RecipeListGridView
 import com.dunk.eats.android.presentation.recipe_list.components.SearchAppBar
 import com.dunk.eats.android.theme.AppTheme
-import com.dunk.eats.interactors.recipe_categories.Category
+import com.dunk.eats.interactors.recipe_categories.FoodCategories
 import com.dunk.eats.presentation.recipe_browse.RecipeBrowseEvents
 import com.dunk.eats.presentation.recipe_browse.RecipeBrowseState
-import com.dunk.eats.presentation.recipe_list.RecipeListEvents
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun RecipeBrowseScreen(
     state: RecipeBrowseState,
     onTriggerEvent: (RecipeBrowseEvents) -> Unit,
-    getFoodCategory: (name:String) -> Category?,
+    getFoodFoodCategories: (name:String) -> FoodCategories?,
     onClickRecipeBrowseItem: (Int) -> Unit
 ) {
     AppTheme(
@@ -61,7 +60,7 @@ fun RecipeBrowseScreen(
                     onClickRecipeListItem = onClickRecipeBrowseItem,
                 )
             }else{
-                DisplayPopularCategories(state = state, getFoodCategory = getFoodCategory,onTriggerEvent = onTriggerEvent)
+                DisplayPopularCategories(state = state, getFoodFoodCategories = getFoodFoodCategories,onTriggerEvent = onTriggerEvent)
             }
         }
     }
@@ -71,7 +70,7 @@ fun RecipeBrowseScreen(
 @Composable
 fun DisplayPopularCategories(
     state: RecipeBrowseState,
-    getFoodCategory: (name: String) -> Category?,
+    getFoodFoodCategories: (name: String) -> FoodCategories?,
     onTriggerEvent: (RecipeBrowseEvents) -> Unit
 ) {
     LazyVerticalGrid(
@@ -88,7 +87,7 @@ fun DisplayPopularCategories(
                 title = item.categoryName,
                 imageHeight = 100.dp,
                 onclick = {
-                    val category = getFoodCategory(item.categoryName)
+                    val category = getFoodFoodCategories(item.categoryName)
                     category?.let {
                         onTriggerEvent(RecipeBrowseEvents.OnSelectCategory(category))
                     }
@@ -104,7 +103,7 @@ fun DisplayPopularCategories(
                 title = item.categoryName,
                 imageHeight = 100.dp,
                 onclick = {
-                    val category = getFoodCategory(item.categoryName)
+                    val category = getFoodFoodCategories(item.categoryName)
                     category?.let {
                         onTriggerEvent(RecipeBrowseEvents.OnSelectCategory(category))
                     }

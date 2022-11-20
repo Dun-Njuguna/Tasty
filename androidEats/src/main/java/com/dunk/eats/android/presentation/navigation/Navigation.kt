@@ -75,7 +75,7 @@ fun Navigation() {
                     ListRecipeScreen(
                         state = viewModel.state.value,
                         onTriggerEvent = viewModel::onTriggerEvent,
-                        getFoodCategory = viewModel::getFoodCategory,
+                        getFoodFoodCategories = viewModel::getFoodCategory,
                         onClickRecipeListItem = { recipeId ->
                             navController.navigate(Screen.RecipeDetail.route + "/$recipeId")
                         }
@@ -88,7 +88,7 @@ fun Navigation() {
                     RecipeBrowseScreen(
                         state = viewModel.state.value,
                         onTriggerEvent = viewModel::onTriggerEvent,
-                        getFoodCategory = viewModel::getFoodCategory,
+                        getFoodFoodCategories = viewModel::getFoodCategory,
                         onClickRecipeBrowseItem = { recipeId ->
                             navController.navigate(Screen.RecipeDetail.route + "/$recipeId")
                         }

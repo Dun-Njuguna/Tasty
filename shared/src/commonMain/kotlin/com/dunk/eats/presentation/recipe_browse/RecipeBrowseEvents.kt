@@ -1,7 +1,6 @@
 package com.dunk.eats.presentation.recipe_browse
 
-import com.dunk.eats.interactors.recipe_categories.Category
-import com.dunk.eats.presentation.recipe_list.RecipeListEvents
+import com.dunk.eats.interactors.recipe_categories.FoodCategories
 
 sealed class RecipeBrowseEvents {
     object LoadCategories: RecipeBrowseEvents()
@@ -10,5 +9,5 @@ sealed class RecipeBrowseEvents {
     object RemoveHeadMessageFromQueue: RecipeBrowseEvents()
 
     data class OnUpdateQuery(val query:String): RecipeBrowseEvents()
-    data class OnSelectCategory(val category: Category): RecipeBrowseEvents()
+    data class OnSelectCategory(val foodCategories: FoodCategories): RecipeBrowseEvents()
 }

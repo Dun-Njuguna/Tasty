@@ -13,12 +13,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.dunk.eats.android.presentation.components.RecipeImage
-import com.dunk.eats.interactors.recipe_categories.Category
+import com.dunk.eats.interactors.recipe_categories.FoodCategories
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun CategoryChip(
-    category: Category,
+    foodCategories: FoodCategories,
     isTopLevel: Boolean = false,
     isHorizontal: Boolean = false,
     isSelected: Boolean = false,
@@ -29,7 +29,7 @@ fun CategoryChip(
         modifier = Modifier
             .padding(4.dp)
             .clickable {
-                onSelected(category.categoryName)
+                onSelected(foodCategories.categoryName)
             },
         shape = MaterialTheme.shapes.medium,
         color = if (isSelected) MaterialTheme.colors.primary else Color.LightGray.copy(alpha = 0.3f)
@@ -42,13 +42,13 @@ fun CategoryChip(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.Bottom
             ) {
-                ShowCategoryTitle(category = category)
+                ShowCategoryTitle(foodCategories = foodCategories)
                 Box(
                     contentAlignment = Alignment.TopEnd,
                     modifier = Modifier
                         .padding(bottom = 10.dp)
                 ) {
-                    DisplayCategoryImage(category)
+                    DisplayCategoryImage(foodCategories)
                 }
             }
         } else {
@@ -58,28 +58,28 @@ fun CategoryChip(
                     .wrapContentHeight(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                DisplayCategoryImage(category)
+                DisplayCategoryImage(foodCategories)
                 Spacer(modifier = Modifier.padding(3.dp))
-                ShowCategoryTitle(category = category)
+                ShowCategoryTitle(foodCategories = foodCategories)
             }
         }
     }
 }
 
 @Composable
-private fun DisplayCategoryImage(category: Category) {
+private fun DisplayCategoryImage(foodCategories: FoodCategories) {
     RecipeImage(
-        url = category.imageUrl,
-        contentDescription = category.name,
+        url = foodCategories.imageUrl,
+        contentDescription = foodCategories.name,
         imageHeight = 50.dp,
         isCircle = true
     )
 }
 
 @Composable
-private fun ShowCategoryTitle(category: Category) {
+private fun ShowCategoryTitle(foodCategories: FoodCategories) {
     Text(
-        text = category.name,
+        text = foodCategories.name,
         style = MaterialTheme.typography.body2,
         color = Color.Black
     )

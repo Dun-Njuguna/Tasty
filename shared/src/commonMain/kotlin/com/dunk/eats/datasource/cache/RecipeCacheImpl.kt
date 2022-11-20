@@ -1,8 +1,9 @@
 package com.dunk.eats.datasource.cache
 
-import com.dunk.eats.datasource.network.recipeService.RecipeServiceImp.Companion.RECIPE_PAGINATION_PAGE_SIZE
+
 import com.dunk.eats.domain.model.Recipe
 import com.dunk.eats.domain.util.DatetimeUtil
+import com.dunk.eats.interactors.recipe_list.SearchRecipes.Companion.RECIPE_PAGINATION_PAGE_SIZE
 
 class RecipeCacheImpl(
     recipeDatabase: RecipeDatabase,

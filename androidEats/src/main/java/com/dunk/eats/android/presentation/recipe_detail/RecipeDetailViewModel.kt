@@ -58,7 +58,7 @@ class RecipeDetailViewModel @Inject constructor(
     private fun getRecipe(recipeId:Int){
         getRecipe.execute(
             recipeId = recipeId
-        ).onEach { dataState ->
+        ).collectFlow(viewModelScope) { dataState ->
             state.value = state.value.copy(dataState.isLoading)
             dataState.data?.let {
                 state.value = state.value.copy(recipe = it)
@@ -75,7 +75,7 @@ class RecipeDetailViewModel @Inject constructor(
                 )
             }
 
-        }.launchIn(viewModelScope)
+        }
     }
 
     private fun addErrorToQueue(error: ErrorMessage.Builder) {
