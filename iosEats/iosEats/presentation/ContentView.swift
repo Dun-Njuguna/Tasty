@@ -23,14 +23,6 @@ struct ContentView: View {
     
     var body: some View {
         TabView{
-            RecipeBrowseScreen(
-                networkModule: networkModule,
-                cacheModule: cacheModule)
-                .tabItem{
-                    Image(systemName: "magnifyingglass.circle")
-                    Text("Browse")
-                }
-            
             RecipeListScreen(
                 networkModule: networkModule,
                 cacheModule: cacheModule)
@@ -38,7 +30,13 @@ struct ContentView: View {
                     Image(systemName: "house")
                     Text("Home")
                 }
-        
+            RecipeBrowseScreen(
+                networkModule: networkModule,
+                cacheModule: cacheModule)
+                .tabItem{
+                    Image(systemName: "magnifyingglass.circle")
+                    Text("Browse")
+                }
         }
     }
 }

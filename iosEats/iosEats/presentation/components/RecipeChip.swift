@@ -1,8 +1,8 @@
 //
-//  FoodCategoryChip.swift
+//  RecipeChip.swift
 //  iosEats
 //
-//  Created by Duncan K on 26/11/2022.
+//  Created by Duncan K on 27/11/2022.
 //  Copyright © 2022 orgName. All rights reserved.
 //
 
@@ -10,21 +10,20 @@ import SwiftUI
 import shared
 import SDWebImageSwiftUI
 
-struct FoodCategoryChip: View {
+struct RecipeChip: View {
+    let recipe:Recipe
     
-    let category: FoodCategories
-    
-    let cardHeight: CGFloat = 174
+    let cardHeight: CGFloat = 135
     let imageHeight: CGFloat = 116
     let cornerRadius: CGFloat = 8
     
     private let  onClick: () -> Void
     
     init(
-        category: FoodCategories,
+        recipe: Recipe,
         onClick: @escaping () -> Void
     ) {
-        self.category = category
+        self.recipe = recipe
         self.onClick = onClick
     }
     
@@ -37,7 +36,7 @@ struct FoodCategoryChip: View {
             .fill(Color.black)
             
             VStack(spacing: 0) {
-                WebImage(url: URL(string: "\(category.imageUrl)"))
+                WebImage(url: URL(string: "\(recipe.featuredImage)"))
                     .resizable()
                     .indicator(.activity)
                     .padding(.bottom, 10)
@@ -52,7 +51,7 @@ struct FoodCategoryChip: View {
                     )
                 
                 LazyVStack(alignment: .leading) {
-                    Text("\(category.name)")
+                    Text("\(recipe.title)")
                         .font(.custom("Avenir", size: 14))
                 }
                 .padding(.all,10)
@@ -63,9 +62,5 @@ struct FoodCategoryChip: View {
         }
         .shadow(color: .gray, radius: 2, x: 0.8, y: 0.8)
     }
-    
 }
-
-
-
 

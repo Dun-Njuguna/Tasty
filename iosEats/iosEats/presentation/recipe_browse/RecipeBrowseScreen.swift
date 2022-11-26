@@ -57,6 +57,9 @@ struct RecipeBrowseScreen: View {
                 }
                 .padding(.horizontal, 8)
             }
+            if(viewModel.state.isLoading){
+                ProgressView("Loading...")
+            }
         }
         .navigate(to: SearchRecipeList(recipeBrowseViewModel: viewModel), title: viewModel.state.query, when: $isShowingSearchView)
     }
