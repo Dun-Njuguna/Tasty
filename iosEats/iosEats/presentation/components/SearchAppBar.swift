@@ -49,7 +49,7 @@ struct SearchAppBar: View {
         .background(Color(UIColor.lightGray))
         .frame(height: 50)
         .cornerRadius(10)
-        .padding()
+        .padding(EdgeInsets.init(top: 0, leading: 8, bottom: 8, trailing: 8))
     }
 }
 

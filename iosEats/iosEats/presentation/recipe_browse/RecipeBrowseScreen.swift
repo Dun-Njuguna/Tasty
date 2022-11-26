@@ -18,6 +18,8 @@ struct RecipeBrowseScreen: View {
     @ObservedObject var viewModel: RecipeBrowseViewModel
     @State var isShowingSearchView:Bool = false
     
+    private var gridItemLayout = [GridItem(.adaptive(minimum: 150))]
+    
     init(
         networkModule: NetworkModule,
         cacheModule: CachingModule
@@ -46,15 +48,17 @@ struct RecipeBrowseScreen: View {
                 }
             )
             
-            List{
-                getTitle(title: "Top Categories")
-                topCategories()
-                getTitle(title: "All Categories")
-                allCategories()
+            ScrollView {
+                VStack(alignment: .leading, spacing: 8) {
+                    getTitle(title: "Top Categories")
+                    topCategories()
+                    getTitle(title: "All Categories")
+                    allCategories()
+                }
+                .padding(.horizontal, 8)
             }
-            .padding(EdgeInsets.init(top: 0, leading: 4, bottom: 0, trailing: 4))
-            .listStyle(PlainListStyle())
-        }.navigate(to: SearchRecipeList(recipeBrowseViewModel: viewModel), title: viewModel.state.query, when: $isShowingSearchView)
+        }
+        .navigate(to: SearchRecipeList(recipeBrowseViewModel: viewModel), title: viewModel.state.query, when: $isShowingSearchView)
     }
     
     func getTitle(title:String) -> some View {
@@ -63,16 +67,26 @@ struct RecipeBrowseScreen: View {
     }
     
     func topCategories() -> some View  {
-        ForEach(viewModel.getTopCategories(), id: \.self.id){category in
-            Text("\(category.name)")
-                .padding(EdgeInsets.init(top: 0, leading: 10, bottom: 0, trailing: 10))
+        return LazyVGrid(columns: gridItemLayout, spacing: 8) {
+            ForEach(viewModel.getTopCategories(), id: \.self.id){category in
+                FoodCategoryChip(category: category){
+                    viewModel.onTriggerEvent(stateEvent: RecipeBrowseEvents.OnUpdateQuery(query: category.name))
+                    viewModel.onTriggerEvent(stateEvent: RecipeBrowseEvents.NewSearch())
+                    isShowingSearchView = true
+                }
+            }
         }
     }
     
     func allCategories() -> some View {
-        ForEach(viewModel.state.categories, id: \.self.id){category in
-            Text("\(category.name)")
-                .padding(EdgeInsets.init(top: 0, leading: 10, bottom: 0, trailing: 10))
+        LazyVGrid(columns: gridItemLayout, spacing: 8) {
+            ForEach(viewModel.state.categories, id: \.self.id){category in
+                FoodCategoryChip(category: category){
+                    viewModel.onTriggerEvent(stateEvent: RecipeBrowseEvents.OnUpdateQuery(query: category.name))
+                    viewModel.onTriggerEvent(stateEvent: RecipeBrowseEvents.NewSearch())
+                    isShowingSearchView = true
+                }
+            }
         }
     }
 }

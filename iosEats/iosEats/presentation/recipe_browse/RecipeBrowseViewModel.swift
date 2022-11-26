@@ -31,7 +31,7 @@ class RecipeBrowseViewModel: ObservableObject {
         case is RecipeBrowseEvents.LoadCategories :
             loadCategories()
         case is RecipeBrowseEvents.NextPage :
-            doNothing()
+            loadNextPage()
         case is RecipeBrowseEvents.NewSearch :
             newSearch()
         case is RecipeBrowseEvents.OnUpdateQuery :
@@ -151,6 +151,12 @@ class RecipeBrowseViewModel: ObservableObject {
             }
         }
         return false
+    }
+    
+    func loadNextPage(){
+        let currentState = (self.state.copy() as! RecipeBrowseState)
+        updateState(page: Int(currentState.page + 1))
+        loadRecipes()
     }
     
     
