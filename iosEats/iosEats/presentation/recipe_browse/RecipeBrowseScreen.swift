@@ -16,6 +16,7 @@ struct RecipeBrowseScreen: View {
     private let searchRecipesModule: SearchRecipesModule
     
     @ObservedObject var viewModel: RecipeBrowseViewModel
+    @State var isShowingSearchView:Bool = false
     
     init(
         networkModule: NetworkModule,
@@ -34,16 +35,26 @@ struct RecipeBrowseScreen: View {
     }
     
     var body: some View {
-        VStack(alignment: .leading){
-            SearchAppBar()
-            Spacer(minLength: 8)
+        VStack(alignment: .leading, spacing: 0){
+            SearchAppBar(
+                query: viewModel.state.query,
+                onSearch: { event in
+                    viewModel.onTriggerEvent(stateEvent: event)
+                    if(event == RecipeBrowseEvents.NewSearch()){
+                        isShowingSearchView = true
+                    }
+                }
+            )
+            
             List{
                 getTitle(title: "Top Categories")
                 topCategories()
                 getTitle(title: "All Categories")
                 allCategories()
             }
-        }
+            .padding(EdgeInsets.init(top: 0, leading: 4, bottom: 0, trailing: 4))
+            .listStyle(PlainListStyle())
+        }.navigate(to: SearchRecipeList(recipeBrowseViewModel: viewModel), title: viewModel.state.query, when: $isShowingSearchView)
     }
     
     func getTitle(title:String) -> some View {
@@ -59,7 +70,7 @@ struct RecipeBrowseScreen: View {
     }
     
     func allCategories() -> some View {
-       ForEach(viewModel.state.categories, id: \.self.id){category in
+        ForEach(viewModel.state.categories, id: \.self.id){category in
             Text("\(category.name)")
                 .padding(EdgeInsets.init(top: 0, leading: 10, bottom: 0, trailing: 10))
         }
