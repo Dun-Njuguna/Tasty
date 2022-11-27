@@ -8,4 +8,10 @@ data class RecipeDetailState(
     val isLoading:Boolean = false,
     val recipe: Recipe? = null,
     val errorQueue: Queue<ErrorMessage> = Queue(mutableListOf())
-)
+){
+    constructor() : this (
+        isLoading =false,
+        recipe = null,
+        errorQueue =  Queue(mutableListOf())
+    )
+}

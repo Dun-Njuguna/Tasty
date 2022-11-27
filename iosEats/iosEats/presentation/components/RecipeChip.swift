@@ -12,19 +12,27 @@ import SDWebImageSwiftUI
 
 struct RecipeChip: View {
     let recipe:Recipe
-    
-    let cardHeight: CGFloat = 135
-    let imageHeight: CGFloat = 116
-    let cornerRadius: CGFloat = 8
+    let cardHeight: CGFloat
+    let cornerRadius: CGFloat
+    let displayDetaildData:Bool
+    let dateTimeUtil: DatetimeUtil?
     
     private let  onClick: () -> Void
     
     init(
         recipe: Recipe,
+        cardHeight: CGFloat = 135,
+        cornerRadius: CGFloat = 8,
+        displayDetaildData:Bool = false,
+        dateTimeUtil: DatetimeUtil? = nil,
         onClick: @escaping () -> Void
     ) {
         self.recipe = recipe
         self.onClick = onClick
+        self.cardHeight = cardHeight
+        self.cornerRadius = cornerRadius
+        self.displayDetaildData = displayDetaildData
+        self.dateTimeUtil = dateTimeUtil
     }
     
     var body: some View {
@@ -43,16 +51,14 @@ struct RecipeChip: View {
                     .aspectRatio(contentMode: .fill)
                     .frame(minWidth: 0, maxWidth: .infinity, minHeight: cardHeight, maxHeight: cardHeight)
                     .cornerRadius(cornerRadius, corners: [.topLeft, .bottomRight])
-                    .gesture(
-                        TapGesture()
-                            .onEnded { _ in
-                               onClick()
-                            }
-                    )
                 
-                LazyVStack(alignment: .leading) {
-                    Text("\(recipe.title)")
+                HStack(alignment: .lastTextBaseline) {
+                    Text("\(getTitle())")
+                        .font(.custom("Avenir", size: 16))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    Text("\(recipe.rating)")
                         .font(.custom("Avenir", size: 14))
+                        .frame(maxWidth: .infinity, alignment: .trailing)
                 }
                 .padding(.all,10)
                 
@@ -61,6 +67,19 @@ struct RecipeChip: View {
             .cornerRadius(cornerRadius)
         }
         .shadow(color: .gray, radius: 2, x: 0.8, y: 0.8)
+        .contentShape(Rectangle())
+        .onTapGesture {
+            onClick()
+        }
+    }
+    
+    private func getTitle() -> String{
+       if displayDetaildData && dateTimeUtil != nil {
+           return "Update on \(dateTimeUtil!.humanizeDatetime(date: recipe.dateUpdated)) by \(recipe.publisher)"
+        }
+        else {
+           return recipe.title
+        }
     }
 }
 

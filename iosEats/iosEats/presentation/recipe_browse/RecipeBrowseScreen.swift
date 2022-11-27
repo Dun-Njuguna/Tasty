@@ -61,7 +61,7 @@ struct RecipeBrowseScreen: View {
                 ProgressView("Loading...")
             }
         }
-        .navigate(to: SearchRecipeList(recipeBrowseViewModel: viewModel), title: viewModel.state.query, when: $isShowingSearchView)
+        .navigate(to: SearchRecipeList(recipeBrowseViewModel: viewModel, cacheModule: cacheModule), title: viewModel.state.query, when: $isShowingSearchView)
     }
     
     func getTitle(title:String) -> some View {

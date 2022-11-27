@@ -16,6 +16,8 @@ struct RecipeListScreen: View {
     private let searchRecipesModule: SearchRecipesModule
     
     @ObservedObject var viewModel: RecipeListViewModel
+    @State var showingDetailSheet:Bool = false
+    
     
     init(
         networkModule: NetworkModule,
@@ -35,11 +37,34 @@ struct RecipeListScreen: View {
     
     var body: some View {
         ScrollView{
-            LazyVStack() {
+            LazyVStack(spacing: 10) {
                 ForEach(viewModel.state.recipes, id: \.self.id){recipe in
-                    RecipeChip(recipe: recipe, onClick: {
+                    RecipeChip(
+                        recipe: recipe,
+                        onClick: {
+                            viewModel.clickedRecipe = recipe
+                            showingDetailSheet = true
+                        }
+                    )
+                    .sheet(
+                        isPresented: $showingDetailSheet,
+                        onDismiss: {
+                            viewModel.clickedRecipe = nil
+                            showingDetailSheet = false
+                        }
+                    ){
+                        if viewModel.clickedRecipe != nil {
+                            NavigationView {
+                                RecipeDetailScreen(
+                                    recipeId: Int(viewModel.clickedRecipe!.id),
+                                    recipeCache: cacheModule.recipeCache
+                                )
+                                .cornerRadius(8, corners: [.topLeft, .topRight])
+                                .navigationBarTitle(Text("\(viewModel.clickedRecipe!.title)"), displayMode: .inline)
+                            }
+                        }
                         
-                    })
+                    }
                     .onAppear(perform:  {
                         if viewModel.shouldLoadNextPage(recipe: recipe){
                             viewModel.onTriggerEvent(stateEvent: RecipeListEvents.NextPage())

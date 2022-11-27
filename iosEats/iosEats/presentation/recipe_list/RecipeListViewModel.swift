@@ -13,6 +13,7 @@ class RecipeListViewModel: ObservableObject {
     
     let searchRecipes: SearchRecipes
     let foodCategories: CategoryTypes
+    var clickedRecipe: Recipe? = nil
     
     @Published var state: RecipeListState = RecipeListState()
     

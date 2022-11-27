@@ -10,9 +10,10 @@ import SwiftUI
 import shared
 
 class RecipeBrowseViewModel: ObservableObject {
+    
     let searchRecipes: SearchRecipes
     let foodCategories: CategoryTypes
-    
+    var clickedRecipe: Recipe? = nil
     
     @Published var state: RecipeBrowseState = RecipeBrowseState()
 
