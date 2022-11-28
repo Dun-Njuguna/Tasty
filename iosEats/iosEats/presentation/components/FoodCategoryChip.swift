@@ -44,12 +44,6 @@ struct FoodCategoryChip: View {
                     .aspectRatio(contentMode: .fill)
                     .frame(minWidth: 0, maxWidth: .infinity, minHeight: cardHeight, maxHeight: cardHeight)
                     .cornerRadius(cornerRadius, corners: [.topLeft, .bottomRight])
-                    .gesture(
-                        TapGesture()
-                            .onEnded { _ in
-                               onClick()
-                            }
-                    )
                 
                 LazyVStack(alignment: .leading) {
                     Text("\(category.name)")
@@ -62,6 +56,10 @@ struct FoodCategoryChip: View {
             .cornerRadius(cornerRadius)
         }
         .shadow(color: .gray, radius: 2, x: 0.8, y: 0.8)
+        .contentShape(Rectangle())
+        .onTapGesture {
+            onClick()
+        }
     }
     
 }

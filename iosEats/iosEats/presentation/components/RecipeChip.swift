@@ -33,6 +33,7 @@ struct RecipeChip: View {
         self.cornerRadius = cornerRadius
         self.displayDetaildData = displayDetaildData
         self.dateTimeUtil = dateTimeUtil
+        SDWebImageDownloader.shared.config.downloadTimeout = 300
     }
     
     var body: some View {
